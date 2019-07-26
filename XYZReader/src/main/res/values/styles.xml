@@ -22,7 +22,115 @@
     </style>
 
     <style name="Theme.Bacon.Detail">
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/holo_blue_dark</item>
+    </style>
+
+    <!-- Style of the toolbar -->
+    <style name="toolBarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?android:actionBarSize</item>
+        <item name="android:elevation">@dimen/toolbar_elevation</item>
+    </style>
+
+
+    <style name="AppBarLayoutStyle" parent="Widget.Design.AppBarLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:elevation">@dimen/app_bar_layout_elevation</item>
+    </style>
+
+    <!-- Style of the toolbar -->
+    <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?android:actionBarSize</item>
+        <item name="android:elevation">@dimen/detail_toolbar_elevation</item>
+    </style>
+
+    <!-- app logo in the ArticleListActivity -->
+    <style name="appLogoStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <!--  NetworkImageView -->
+    <style name="NetworkImageViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <!-- title in the ArticleListActivity -->
+    <style name="articleSubtitleStyle" parent="TextAppearance.AppCompat.SearchResult.Subtitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">@dimen/title_padding_horizontal_start</item>
+        <item name="android:paddingEnd">@dimen/title_padding_horizontal_end</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/article_title</item>
+
+    </style>
+
+    <!-- Style of the body text in the ArticleDetailActivity -->
+    <style name="ArticleBodyTextViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/detail_inner_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/detail_body_top_margin</item>
+        <item name="android:layout_marginRight">@dimen/detail_inner_horizontal_margin</item>
+        <item name="android:paddingBottom">@dimen/detail_body_bottom_margin</item>
+        <item name="android:textColor">@color/article_body</item>
+        <item name="android:textColorLink">@color/article_body</item>
+        <item name="android:textSize">@dimen/detail_body_text_size</item>
+    </style>
+
+
+    <!-- Style of the FloatingActionButton in the ArticleDetailActivity -->
+    <style name="FloatingActionButtonStyle" parent="Widget.Design.FloatingActionButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="android:stateListAnimator">@animator/fab_state_list_anim</item>
+    </style>
+
+    <!-- Style of the CollapsingToolbarLayout -->
+    <style name="CollapsingToolbarLayoutStyle" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+
+    <!-- Style of the ScrollView -->
+    <style name="ScrollViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:nestedScrollingEnabled">true</item>
+        <item name="android:paddingLeft">@dimen/list_side_margin</item>
+        <item name="android:paddingTop">@dimen/scroll_view_padding_top</item>
+        <item name="android:paddingBottom">@dimen/scroll_view_padding_bottom</item>
+        <item name="android:scrollbarStyle">outsideInset</item>
+    </style>
+
+    <!-- Style of the ImageView in the ArticleDetailActivity -->
+    <style name="DetailImageViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <!-- Style of the RecyclerView -->
+    <style name="RecyclerViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:paddingLeft">@dimen/list_side_margin</item>
+        <item name="android:paddingRight">@dimen/list_side_margin</item>
+        <item name="android:paddingBottom">@dimen/list_bottom_margin</item>
+        <item name="android:paddingTop">@dimen/list_top_margin</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
     </style>
 
 </resources>

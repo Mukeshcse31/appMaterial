@@ -9,4 +9,9 @@
 
     <string name="up">Up</string>
 
+    <string name="loading_finished_snackBar">the articles have been loaded</string>
+    <string name="close_snackBar">CLOSE</string>
+
+    <string name="photo_content_description">Photo of the article</string>
+
 </resources>

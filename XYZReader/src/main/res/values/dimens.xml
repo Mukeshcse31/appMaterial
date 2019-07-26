@@ -7,5 +7,23 @@
     <dimen name="fab_elevation">2dp</dimen>
     <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="title_padding_horizontal_start">8dp</dimen>
+    <dimen name="title_padding_horizontal_end">8dp</dimen>
+    <dimen name="detail_inner_horizontal_margin">16dp</dimen>
+
+    <dimen name="app_bar_layout_main_height">192dp</dimen>
+    <dimen name="app_bar_layout_elevation">4dp</dimen>
+    <dimen name="detail_toolbar_elevation">2dp</dimen>
+
+    <dimen name="detail_collapsing_toolbar_layout_margin_start">72dp</dimen>
+
+
+    <dimen name="scroll_view_padding_top">112dp</dimen>
+    <dimen name="scroll_view_padding_bottom">28dp</dimen>
+
+
+    <dimen name="list_top_margin">112dp</dimen>
+    <dimen name="list_bottom_margin">24dp</dimen>
 
 </resources>

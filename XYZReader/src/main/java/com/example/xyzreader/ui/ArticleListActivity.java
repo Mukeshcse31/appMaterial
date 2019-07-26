@@ -1,6 +1,8 @@
 package com.example.xyzreader.ui;
 
+import android.app.ActivityOptions;
 import android.app.LoaderManager;
+import android.app.SharedElementCallback;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +10,8 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +19,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
@@ -31,6 +36,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
 
 /**
  * An activity representing a list of Articles. This activity has different presentations for
@@ -45,12 +52,21 @@ public class ArticleListActivity extends AppCompatActivity implements
     private Toolbar mToolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-
+private CoordinatorLayout mCoordinatorLayout;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
+
+    private final String photoKey = "photo";
+    private String transitionName;
+    private DynamicHeightNetworkImageView sharedView;
+    private int id;
+    private final String transitionNameKey = "transitionName";
+
+    private static final String idKey = "id";
+    private static final String bundleKey = "bundle";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +75,18 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         final View toolbarContainerView = findViewById(R.id.toolbar_container);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        /* Prepare and postpone the EnterTransition */
+        prepareTransitions();
+        postponeEnterTransition();
+
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
@@ -72,6 +94,21 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
     }
 
+
+    private void prepareTransitions() {
+        /* Set the ExitTransition, as well as the ExitSharedElementCallback */
+        getWindow().setExitTransition(TransitionInflater.from(this).inflateTransition(R.transition.grid_exit_transition));
+        setExitSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForAdapterPosition(id);
+                if (viewHolder == null) {
+                    return;
+                }
+                sharedElements.put(names.get(0), viewHolder.itemView.findViewById(R.id.thumbnail));
+            }
+        });
+    }
     private void refresh() {
         startService(new Intent(this, UpdaterService.class));
     }
@@ -119,6 +156,19 @@ public class ArticleListActivity extends AppCompatActivity implements
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
+
+//https://stackoverflow.com/questions/30729312/how-to-dismiss-a-snackbar-using-its-own-action-button
+        final Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content),
+                getString(R.string.loading_finished_snackBar), Snackbar.LENGTH_LONG);
+
+        snackBar.setAction(getString(R.string.close_snackBar), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call your action method here
+                snackBar.dismiss();
+            }
+        });
+        snackBar.show();
     }
 
     @Override
@@ -146,8 +196,24 @@ public class ArticleListActivity extends AppCompatActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
+
+
+                    sharedView = vh.thumbnailView;
+
+                    /* Create a transitionName from the photoKey and id, and set it to the sharedView*/
+                    id = vh.getAdapterPosition();
+                    transitionName = photoKey + id;
+                    sharedView.setTransitionName(transitionName);
+
+                    Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(ArticleListActivity.this, sharedView, transitionName).toBundle();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition())));
+                    intent.putExtra(bundleKey, bundle);
+                    intent.putExtra(idKey, id);
+                    intent.putExtra(transitionNameKey, transitionName);
+                    startActivity(intent, bundle);
+
+
+//                    startActivity(new Intent(Intent.ACTION_VIEW,ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
                 }
             });
             return vh;
