@@ -14,15 +14,15 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.transition.TransitionInflater;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -83,8 +83,11 @@ private CoordinatorLayout mCoordinatorLayout;
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+        SnapHelper helper = new LinearSnapHelper();
+        helper.attachToRecyclerView(mRecyclerView);
+
         /* Prepare and postpone the EnterTransition */
-        prepareTransitions();
+        setTransition();
         postponeEnterTransition();
 
         getLoaderManager().initLoader(0, null, this);
@@ -95,9 +98,9 @@ private CoordinatorLayout mCoordinatorLayout;
     }
 
 
-    private void prepareTransitions() {
+    private void setTransition() {
         /* Set the ExitTransition, as well as the ExitSharedElementCallback */
-        getWindow().setExitTransition(TransitionInflater.from(this).inflateTransition(R.transition.grid_exit_transition));
+        getWindow().setExitTransition(TransitionInflater.from(this).inflateTransition(R.transition.transition_grid_exit));
         setExitSharedElementCallback(new SharedElementCallback() {
             @Override
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
